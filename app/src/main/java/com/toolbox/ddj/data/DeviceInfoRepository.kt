@@ -71,18 +71,19 @@ class DeviceInfoRepository(private val context: Context) {
     }
 
     private fun collectDisplay(): DisplayInfo {
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val metrics = DisplayMetrics()
         @Suppress("DEPRECATION")
-        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
-            .defaultDisplay
-            .getRealMetrics(metrics)
+        val display = windowManager.defaultDisplay
+        @Suppress("DEPRECATION")
+        display.getRealMetrics(metrics)
 
         return DisplayInfo(
             widthPx = metrics.widthPixels,
             heightPx = metrics.heightPixels,
             densityDpi = metrics.densityDpi,
             density = metrics.density,
-            refreshRateHz = metrics.refreshRate,
+            refreshRateHz = display.refreshRate,
             widthDp = metrics.widthPixels / metrics.density,
             heightDp = metrics.heightPixels / metrics.density
         )

@@ -19,13 +19,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DingDongJiApp()
+            DingDongJiRoot()
         }
     }
 }
 
 @Composable
-private fun DingDongJiApp() {
+private fun DingDongJiRoot() {
     DingDongJiTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             DingDongJiNavGraph()

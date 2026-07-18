@@ -11,31 +11,34 @@ import java.util.concurrent.TimeUnit
 object RootUtils {
 
     /** 是否检测到 su 二进制可用。 */
-    fun isSuAvailable(): Boolean = try {
-        val p = Runtime.getRuntime().exec(arrayOf("which", "su"))
-        // kotlin.Process.waitFor(timeout, unit) 扩展返回 Boolean
-        if (!p.waitFor(2, TimeUnit.SECONDS)) {
-            p.destroyForcibly()
-            return false
+    fun isSuAvailable(): Boolean {
+        return try {
+            val p = Runtime.getRuntime().exec(arrayOf("which", "su"))
+            if (!p.waitFor(2, TimeUnit.SECONDS)) {
+                p.destroyForcibly()
+                return false
+            }
+            p.inputStream.bufferedReader().readText().isNotBlank()
+        } catch (e: Exception) {
+            false
         }
-        p.inputStream.bufferedReader().readText().isNotBlank()
-    } catch (e: Exception) {
-        false
     }
 
     /**
      * 尝试执行 `su -c id`，返回是否成功提权。
      * 若弹授权框被拒绝/超时，均视为不可用。
      */
-    fun isRootGranted(): Boolean = try {
-        if (!isSuAvailable()) return false
-        val p = Runtime.getRuntime().exec(arrayOf("su", "-c", "id"))
-        if (!p.waitFor(3, TimeUnit.SECONDS)) {
-            p.destroyForcibly()
-            return false
+    fun isRootGranted(): Boolean {
+        return try {
+            if (!isSuAvailable()) return false
+            val p = Runtime.getRuntime().exec(arrayOf("su", "-c", "id"))
+            if (!p.waitFor(3, TimeUnit.SECONDS)) {
+                p.destroyForcibly()
+                return false
+            }
+            p.exitValue() == 0
+        } catch (e: Exception) {
+            false
         }
-        p.exitValue() == 0
-    } catch (e: Exception) {
-        false
     }
 }
