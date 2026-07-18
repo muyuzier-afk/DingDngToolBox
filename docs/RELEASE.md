@@ -1,77 +1,42 @@
 # 自动签名与 GitHub Release
 
-推送符合 `v*` 的 tag（例如 `v0.0.1`）后，工作流 `.github/workflows/release.yml` 会：
+本项目为开源发行场景，**签名密钥直接放在仓库** `keystore/` 目录，无需配置 GitHub Secrets。
 
-1. 解码 GitHub Secrets 中的签名密钥
-2. 构建 **已签名** release APK
-3. 用 `apksigner` 校验签名
-4. 创建 GitHub Release 并挂上 APK
+## 仓库内文件
 
-## 1. 准备密钥（一次性）
+| 路径 | 说明 |
+|------|------|
+| `keystore/dingdongji-release.jks` | release 密钥库 |
+| `keystore/signing.properties` | 密码与 alias |
 
-若还没有 release 密钥库：
+`app/build.gradle.kts` 默认读取上述文件；本地与 CI 行为一致。
 
-```bash
-keytool -genkeypair -v \
-  -keystore dingdongji-release.jks \
-  -storetype JKS \
-  -keyalg RSA -keysize 2048 -validity 10000 \
-  -alias dingdongji \
-  -storepass '<STORE_PASSWORD>' \
-  -keypass '<KEY_PASSWORD>' \
-  -dname "CN=DingDongJi Toolbox, OU=OpenSource, O=DingDongJi, C=CN"
-```
-
-导出 Base64（用于 Secret `KEYSTORE_BASE64`）：
+## 发版
 
 ```bash
-base64 -w 0 dingdongji-release.jks
-```
-
-**务必离线备份** `.jks` 与密码。丢失后无法对同一签名证书升级安装。
-
-## 2. 配置 GitHub Secrets
-
-仓库 → Settings → Secrets and variables → Actions → New repository secret：
-
-| Secret 名称 | 内容 |
-|-------------|------|
-| `KEYSTORE_BASE64` | `dingdongji-release.jks` 的 base64（一行） |
-| `KEYSTORE_PASSWORD` | keystore 密码 |
-| `KEY_ALIAS` | 别名，例如 `dingdongji` |
-| `KEY_PASSWORD` | key 密码（可与 store 相同） |
-
-`GITHUB_TOKEN` 由 Actions 自动注入，无需手建。
-
-## 3. 发布版本
-
-```bash
-# 建议语义化版本：v主.次.补丁
 git tag v0.0.1
 git push origin v0.0.1
 ```
 
-或在 Actions 页手动运行 **Release**，输入 tag（如 `v0.0.1`）。
+或在 Actions 页手动运行 **Release**，输入 tag。
 
-版本规则：
+规则：
 
 - `versionName` = 去掉 `v` 后的字符串（`v0.0.1` → `0.0.1`）
 - `versionCode` = `主*10000 + 次*100 + 补丁`（`0.0.1` → `1`）
 
-## 4. 本地签名构建
+## 本地构建已签名 APK
 
 ```bash
-cp keystore.properties.example keystore.properties
-# 编辑 storeFile / 密码 / alias
-
-./gradlew :app:assembleRelease
-# 或使用系统 gradle：
 gradle :app:assembleRelease
+# 产物：app/build/outputs/apk/release/
 ```
 
-产物：`app/build/outputs/apk/release/`
+## 工作流分工
 
-## 5. 与日常 CI 的关系
+- `build.yml`：push / PR 打 debug（日常 CI）
+- `release.yml`：tag / 手动触发，打 signed release 并上传到 GitHub Releases
 
-- `build.yml`：push / PR 打 debug（及可选 unsigned release）
-- `release.yml`：仅 tag / 手动触发，打 **signed** release 并上传到 Releases
+## 注意
+
+密钥在公开仓库中可见，任何人都能用同一证书签名。对社区开源 App 一般可接受；若以后要上架商店或更高安全要求，再换成私有 Secrets 即可。

@@ -33,11 +33,8 @@ jobs:
           else
             TAG="${GITHUB_REF_NAME}"
           fi
-          # 去掉 v 前缀
           RAW="${TAG#v}"
-          # versionName：完整语义版本字符串
           VERSION_NAME="$RAW"
-          # versionCode：尽量从 x.y.z 生成  x*10000+y*100+z ，否则用时间戳后 8 位
           if [[ "$RAW" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
             MAJOR="${BASH_REMATCH[1]}"
             MINOR="${BASH_REMATCH[2]}"
@@ -68,37 +65,18 @@ jobs:
           gradle-version: '8.9'
           cache-disabled: false
 
-      - name: Decode keystore
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      - name: Check in-repo keystore
         run: |
           set -euo pipefail
-          if [ -z "${KEYSTORE_BASE64:-}" ]; then
-            echo "::error::Missing secret KEYSTORE_BASE64. See docs/RELEASE.md"
-            exit 1
-          fi
-          echo "$KEYSTORE_BASE64" | base64 -d > "$GITHUB_WORKSPACE/release.jks"
-          # 校验文件非空
-          test -s "$GITHUB_WORKSPACE/release.jks"
-          echo "Keystore decoded to release.jks"
+          test -f keystore/dingdongji-release.jks
+          test -f keystore/signing.properties
+          ls -lh keystore/
 
       - name: Build signed release APK
         env:
-          KEYSTORE_FILE: ${{ github.workspace }}/release.jks
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           VERSION_NAME: ${{ steps.ver.outputs.version_name }}
           VERSION_CODE: ${{ steps.ver.outputs.version_code }}
-        run: |
-          set -euo pipefail
-          for v in KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
-            if [ -z "${!v:-}" ]; then
-              echo "::error::Missing secret $v"
-              exit 1
-            fi
-          done
-          gradle assembleRelease --no-daemon --stacktrace --console=plain
+        run: gradle assembleRelease --no-daemon --stacktrace --console=plain
 
       - name: Locate & verify APK
         id: apk
@@ -107,18 +85,12 @@ jobs:
           APK=$(ls -1 app/build/outputs/apk/release/*-release*.apk | head -n 1)
           test -n "$APK"
           test -f "$APK"
-          echo "apk_path=$APK" >> "$GITHUB_OUTPUT"
           OUT="DingDongJiToolbox-${{ steps.ver.outputs.version_name }}-release.apk"
           cp "$APK" "$OUT"
           echo "apk_upload=$OUT" >> "$GITHUB_OUTPUT"
-          # 校验签名
           "$ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner" verify --verbose "$OUT" || \
             "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --verbose "$OUT"
           ls -lh "$OUT"
-
-      - name: Build debug APK (optional artifact)
-        continue-on-error: true
-        run: gradle assembleDebug --no-daemon --stacktrace --console=plain
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -135,7 +107,7 @@ jobs:
 
             - **versionCode**: `${{ steps.ver.outputs.version_code }}`
             - **包名**: `com.toolbox.ddj`
-            - **签名**: Release 正式签名 APK
+            - **签名**: 仓库内公开 release 密钥签名
 
             ### 安装说明
             1. 下载下方 `DingDongJiToolbox-*-release.apk`
@@ -144,7 +116,3 @@ jobs:
             > 由 GitHub Actions 自动构建并签名发布。
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cleanup keystore
-        if: always()
-        run: rm -f "$GITHUB_WORKSPACE/release.jks"

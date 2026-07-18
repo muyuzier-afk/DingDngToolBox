@@ -35,15 +35,14 @@ captures/
 .externalNativeBuild/
 .cxx/
 
-# Keystore files (keep private keys out of VCS)
-*.jks
+# 其他私有密钥（仓库内公开签名在 keystore/ 目录，显式允许）
 *.keystore
 keystore.properties
 release.jks
+!keystore/dingdongji-release.jks
 
 # Gradle Wrapper binary (CI 中通过 setup-gradle 注入)
 gradle/wrapper/gradle-wrapper.jar
 
-
-# Local secret backups (never commit)
+# Local secret backups
 .local-secrets/
