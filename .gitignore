@@ -38,6 +38,12 @@ captures/
 # Keystore files (keep private keys out of VCS)
 *.jks
 *.keystore
+keystore.properties
+release.jks
 
 # Gradle Wrapper binary (CI 中通过 setup-gradle 注入)
 gradle/wrapper/gradle-wrapper.jar
+
+
+# Local secret backups (never commit)
+.local-secrets/
