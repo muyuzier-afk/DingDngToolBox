@@ -1,0 +1,34 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 鸡的简化身体 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30
+                          C40,30 30,42 30,56
+                          C30,70 42,80 54,80
+                          C66,80 78,70 78,56
+                          C78,42 68,30 54,30 Z" />
+    <!-- 鸡冠 -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M48,28
+                          C48,22 50,18 52,18
+                          C52,22 54,24 54,28
+                          C56,24 58,22 58,18
+                          C60,18 62,22 62,28
+                          L60,30 L48,30 Z" />
+    <!-- 鸡眼 -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M48,52 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M60,52 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <!-- 鸡嘴 -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M52,60 L56,60 L54,66 Z" />
+</vector>
