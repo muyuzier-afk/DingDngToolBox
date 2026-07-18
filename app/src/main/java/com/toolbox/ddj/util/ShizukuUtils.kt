@@ -51,6 +51,6 @@ object ShizukuUtils {
             return
         }
         Shizuku.requestPermission(0)
-        Shizuku.addOnRequestPermissionResultListener(listener)
+        Shizuku.addRequestPermissionResultListener(listener)
     }
 }
