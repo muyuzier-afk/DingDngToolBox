@@ -8,9 +8,9 @@
     <string name="home_subtitle">玩机工具集 · %1$s</string>
     <string name="home_section_basic">基础工具</string>
     <string name="home_section_advanced">高级功能</string>
-    <string name="home_preview_notice">Alpha 预览版：仅包含设备信息与系统监控，高级能力后续开放。</string>
+    <string name="home_preview_notice">Alpha 预览版：基础工具 + ROOT 脚本工具箱。ROOT 功能需授权后使用，操作前请确认风险。</string>
     <string name="home_app_version">应用版本</string>
-    <string name="home_footer">叮咚鸡工具箱 · Alpha 0.0.1-Preview\nUI 风格参考 KernelSU Style UI Kit (Material)</string>
+    <string name="home_footer">叮咚鸡工具箱 · Alpha 0.0.1-Preview\nROOT 脚本部署于 /data/adb/ddj_toolbox</string>
 
     <!-- 工具名 -->
     <string name="tool_device_info">设备信息</string>
@@ -32,6 +32,27 @@
     <string name="perm_unavailable">不可用</string>
     <string name="perm_shizuku_not_installed">未安装</string>
     <string name="perm_shizuku_not_running">未运行</string>
+
+
+    <!-- ROOT 工具 -->
+    <string name="tool_root_tools">ROOT 工具</string>
+    <string name="tool_root_tools_desc">标识修改 / 伪装 / 清理 / 触控等（需 Root）</string>
+    <string name="root_tools_notice">以下能力通过内置 shell 脚本以 Root 执行。修改标识、伪装机型等操作可能影响应用登录与系统稳定性，请自行承担风险。</string>
+    <string name="root_deploy_title">脚本部署状态</string>
+    <string name="root_deploy_need_root">未获得 Root 授权，请先在 Magisk/KernelSU 中允许本应用</string>
+    <string name="root_deploy_idle">等待部署…</string>
+    <string name="root_deploy_path">模块路径：/data/adb/ddj_toolbox/scripts</string>
+    <string name="root_actions">操作</string>
+    <string name="root_output">执行结果</string>
+    <string name="root_output_empty">尚未执行操作</string>
+    <string name="root_running">正在执行：%1$s</string>
+    <string name="root_tool_not_found">未找到该工具</string>
+    <string name="root_confirm_title">确认执行</string>
+    <string name="root_confirm_msg">确定要执行「%1$s」吗？</string>
+    <string name="root_confirm_danger_title">危险操作</string>
+    <string name="root_confirm_danger_msg">「%1$s」可能不可逆或导致重启，确认继续？</string>
+    <string name="action_confirm">确认</string>
+    <string name="action_cancel">取消</string>
 
     <!-- 设备信息 -->
     <string name="info_section_hardware">硬件</string>

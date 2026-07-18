@@ -2,13 +2,20 @@
 
 > 几乎全能的安卓开源玩机工具箱
 
-当前版本：**Alpha 0.0.1-Preview**（首个预览版，仅含设备信息 + 系统监控）。
+当前版本：**Alpha 0.0.1-Preview**（设备信息 + 系统监控 + ROOT 脚本工具箱）。
 
 ## 功能
 
 - **设备信息**：硬件 / 系统 / 屏幕 / 电池一览
 - **系统监控**：CPU / 内存 / 电池 实时采样（每 1.5s）
-- **Root / Shizuku 状态检测**：首页展示双引擎可用性，便于后续接入高级操作
+- **Root / Shizuku 状态检测**：首页展示双引擎可用性
+- **ROOT 工具箱**（需 Root）：内置 shell 脚本部署至 `/data/adb/ddj_toolbox`
+  - 设备标识：Android ID / SSAID / OAID / 序列号
+  - 机型伪装与预设
+  - 防标记 / Persist 隐藏 / 应用隐藏冻结
+  - 游戏缓存清理与自动监听
+  - 触控采样率
+  - 模块设置
 
 ## 技术栈
 
@@ -29,9 +36,10 @@
 │       ├── java/com/toolbox/ddj/
 │       │   ├── DingDongJiApp.kt
 │       │   ├── MainActivity.kt
-│       │   ├── data/         # 数据模型 + Repository
+│       │   ├── data/         # 数据模型 + Repository + Root 脚本目录
 │       │   ├── ui/           # Compose 主题 / 组件 / 屏幕 / 导航
 │       │   └── util/         # Root / Shizuku 工具类
+│       ├── assets/root_scripts/  # 内置 ROOT shell 脚本
 │       └── res/
 ├── gradle/libs.versions.toml # 版本目录
 ├── .github/workflows/build.yml  # CI 构建工作流
@@ -62,9 +70,18 @@ gradle assembleDebug
 # 产物：app/build/outputs/apk/debug/app-debug.apk
 ```
 
+## ROOT 脚本说明
+
+- 资源目录：`app/src/main/assets/root_scripts/`
+- 运行时部署：`/data/adb/ddj_toolbox/scripts/`
+- 日志目录：`/data/adb/ddj_logs/`
+- 首次进入「ROOT 工具」页会自动部署；版本号见 `VERSION` 文件
+- 脚本以 JSON 为主输出，危险操作（重置/重启等）需二次确认
+
 ## 后续路线
 
-- 应用管理（提取 APK / 卸载 / 权限查看 / 冻结）
-- 文件管理 + 缓存清理
+- 应用管理（提取 APK / 卸载 / 权限查看）
+- 文件管理
 - 本地 ADB / Shell 工具（Shizuku 驱动）
-- Root 专属：hosts 编辑、SELinux 状态、init.d 脚本
+- Root：hosts 编辑、SELinux 状态、init.d 脚本
+- 机型预设云同步 / 更完善的 SSAID 图标列表 UI

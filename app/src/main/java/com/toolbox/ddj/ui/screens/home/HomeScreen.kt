@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Devices
@@ -54,6 +55,7 @@ import com.toolbox.ddj.ui.components.TonalCard
 fun HomeScreen(
     onOpenDeviceInfo: () -> Unit,
     onOpenSystemMonitor: () -> Unit,
+    onOpenRootTools: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val perm by viewModel.permState.collectAsStateWithLifecycle()
@@ -124,6 +126,12 @@ fun HomeScreen(
             )
 
             SectionLabel(stringResource(R.string.home_section_advanced))
+            ToolEntryCard(
+                title = stringResource(R.string.tool_root_tools),
+                description = stringResource(R.string.tool_root_tools_desc),
+                icon = Icons.Filled.AdminPanelSettings,
+                onClick = onOpenRootTools
+            )
             ToolEntryCard(
                 title = stringResource(R.string.tool_more_coming),
                 description = stringResource(R.string.tool_more_coming_desc),
