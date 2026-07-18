@@ -1,0 +1,69 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: |
+            platforms;android-34
+            build-tools;34.0.0
+            platform-tools
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+          cache-disabled: false
+
+      - name: Show environment
+        run: |
+          echo "Java: $(java -version 2>&1)"
+          echo "Gradle: $(gradle --version | head -n 5)"
+          echo "SDK root: $ANDROID_SDK_ROOT"
+          ls "$ANDROID_SDK_ROOT/platforms" || true
+
+      - name: Build debug APK
+        run: gradle assembleDebug --no-daemon --stacktrace --console=plain
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dingdongji-toolbox-debug
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: (Optional) Build release APK without signing
+        continue-on-error: true
+        run: gradle assembleRelease --no-daemon --stacktrace --console=plain
+
+      - name: Upload release APK (if any)
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: dingdongji-toolbox-release-unsigned
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: ignore
+          retention-days: 30

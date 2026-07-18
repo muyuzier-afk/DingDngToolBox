@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">叮咚鸡工具箱</string>
+    <string name="app_version">Alpha 0.0.1-Preview</string>
+
+    <!-- 首页 -->
+    <string name="home_title">叮咚鸡工具箱</string>
+    <string name="home_subtitle">玩机工具集 · %1$s</string>
+    <string name="home_section_basic">基础工具</string>
+    <string name="home_section_advanced">高级功能</string>
+
+    <!-- 工具名 -->
+    <string name="tool_device_info">设备信息</string>
+    <string name="tool_device_info_desc">硬件 / 系统 / 屏幕 / 电池一览</string>
+    <string name="tool_system_monitor">系统监控</string>
+    <string name="tool_system_monitor_desc">CPU / 内存 / 电池实时监控</string>
+
+    <!-- 权限状态 -->
+    <string name="perm_root_status">Root 状态</string>
+    <string name="perm_shizuku_status">Shizuku 状态</string>
+    <string name="perm_available">可用</string>
+    <string name="perm_unavailable">不可用</string>
+
+    <!-- 设备信息 -->
+    <string name="info_section_hardware">硬件</string>
+    <string name="info_section_system">系统</string>
+    <string name="info_section_display">屏幕</string>
+    <string name="info_section_battery">电池</string>
+
+    <!-- 系统监控 -->
+    <string name="monitor_cpu">CPU</string>
+    <string name="monitor_memory">内存</string>
+    <string name="monitor_battery">电池</string>
+    <string name="monitor_usage">使用率</string>
+    <string name="monitor_temperature">温度</string>
+
+    <!-- 通用 -->
+    <string name="action_back">返回</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_settings">设置</string>
+    <string name="loading">加载中…</string>
+</resources>
