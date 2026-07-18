@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">叮咚鸡工具箱</string>
     <string name="app_version">Alpha 0.0.1-Preview</string>
@@ -7,24 +8,67 @@
     <string name="home_subtitle">玩机工具集 · %1$s</string>
     <string name="home_section_basic">基础工具</string>
     <string name="home_section_advanced">高级功能</string>
+    <string name="home_preview_notice">Alpha 预览版：仅包含设备信息与系统监控，高级能力后续开放。</string>
+    <string name="home_app_version">应用版本</string>
+    <string name="home_footer">叮咚鸡工具箱 · Alpha 0.0.1-Preview\nUI 风格参考 KernelSU Style UI Kit (Material)</string>
 
     <!-- 工具名 -->
     <string name="tool_device_info">设备信息</string>
     <string name="tool_device_info_desc">硬件 / 系统 / 屏幕 / 电池一览</string>
     <string name="tool_system_monitor">系统监控</string>
     <string name="tool_system_monitor_desc">CPU / 内存 / 电池实时监控</string>
+    <string name="tool_more_coming">更多工具</string>
+    <string name="tool_more_coming_desc">ADB / 应用管理 / 清理 / 文件管理（即将到来）</string>
 
     <!-- 权限状态 -->
+    <string name="perm_section">权限状态</string>
+    <string name="perm_ready">已具备提权能力</string>
+    <string name="perm_missing">暂无可用提权通道</string>
+    <string name="perm_granted">已就绪</string>
+    <string name="perm_action_required">需配置</string>
     <string name="perm_root_status">Root 状态</string>
     <string name="perm_shizuku_status">Shizuku 状态</string>
     <string name="perm_available">可用</string>
     <string name="perm_unavailable">不可用</string>
+    <string name="perm_shizuku_not_installed">未安装</string>
+    <string name="perm_shizuku_not_running">未运行</string>
 
     <!-- 设备信息 -->
     <string name="info_section_hardware">硬件</string>
     <string name="info_section_system">系统</string>
     <string name="info_section_display">屏幕</string>
     <string name="info_section_battery">电池</string>
+    <string name="info_section_extended">扩展（预览）</string>
+    <string name="info_brand">品牌</string>
+    <string name="info_manufacturer">厂商</string>
+    <string name="info_model">型号</string>
+    <string name="info_device_code">设备代号</string>
+    <string name="info_board">主板</string>
+    <string name="info_hardware">硬件标识</string>
+    <string name="info_abis">支持 ABI</string>
+    <string name="info_android_version">Android 版本</string>
+    <string name="info_sdk">SDK 版本</string>
+    <string name="info_build_id">Build ID</string>
+    <string name="info_security_patch">安全补丁</string>
+    <string name="info_bootloader">Bootloader</string>
+    <string name="info_build_time">构建时间</string>
+    <string name="info_fingerprint">Fingerprint</string>
+    <string name="info_resolution">分辨率</string>
+    <string name="info_density">密度</string>
+    <string name="info_dp_size">DP 尺寸</string>
+    <string name="info_refresh_rate">刷新率</string>
+    <string name="info_level">电量</string>
+    <string name="info_status">状态</string>
+    <string name="info_health">健康度</string>
+    <string name="info_plugged">电源</string>
+    <string name="info_technology">技术</string>
+    <string name="info_temperature">温度</string>
+    <string name="info_voltage">电压</string>
+    <string name="info_check_home">可于首页查看状态</string>
+    <string name="info_note_label">说明</string>
+    <string name="info_note_alpha">Alpha 版仅采集公开 API 数据</string>
+    <string name="unknown">未知</string>
+    <string name="load_failed">加载失败：%1$s</string>
 
     <!-- 系统监控 -->
     <string name="monitor_cpu">CPU</string>
@@ -32,10 +76,19 @@
     <string name="monitor_battery">电池</string>
     <string name="monitor_usage">使用率</string>
     <string name="monitor_temperature">温度</string>
+    <string name="monitor_cores">逻辑核心数</string>
+    <string name="monitor_mem_total">总内存</string>
+    <string name="monitor_mem_available">可用</string>
+    <string name="monitor_mem_used">已用</string>
+    <string name="monitor_current">瞬时电流</string>
+    <string name="monitor_discharge">放电 %1$d mA</string>
+    <string name="monitor_charge">充电 %1$d mA</string>
 
     <!-- 通用 -->
     <string name="action_back">返回</string>
     <string name="action_refresh">刷新</string>
     <string name="action_settings">设置</string>
+    <string name="action_start">开始</string>
+    <string name="action_pause">暂停</string>
     <string name="loading">加载中…</string>
 </resources>
