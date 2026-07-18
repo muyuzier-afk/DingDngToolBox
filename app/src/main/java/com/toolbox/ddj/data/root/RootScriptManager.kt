@@ -76,15 +76,22 @@ class RootScriptManager(private val context: Context) {
             }
         }
 
-        val src = local.absolutePath
-        val deployCmd = """
-            mkdir -p ${RootUtils.shellQuote(REMOTE_SCRIPTS_DIR)} && \
-            cp -f ${RootUtils.shellQuote(src)}/* ${RootUtils.shellQuote(REMOTE_SCRIPTS_DIR)}/ && \
-            chmod 755 ${RootUtils.shellQuote(REMOTE_SCRIPTS_DIR)}/*.sh && \
-            mkdir -p ${RootUtils.shellQuote(MODULE_DIR)} && \
-            touch ${RootUtils.shellQuote("$MODULE_DIR/settings.conf")} && \
-            echo deployed
-        """.trimIndent().replace("\n", " ")
+        // 逐文件 cat 复制：弃用 cp（部分设备缺 cp applet，且 src/* 依赖通配符展开两处隐患）。
+        // 所有脚本一律经 `sh 脚本` 或 source 调用，无需可执行位，故一并去掉多余的 chmod。
+        val files = local.listFiles()?.filter { it.isFile }?.sortedBy { it.name }.orEmpty()
+        if (files.isEmpty()) {
+            return DeployResult(false, "本地脚本目录为空，无法部署", REMOTE_SCRIPTS_DIR)
+        }
+        val deployCmd = buildString {
+            append("mkdir -p ${RootUtils.shellQuote(REMOTE_SCRIPTS_DIR)}")
+            files.forEach { f ->
+                append(" && cat ${RootUtils.shellQuote(f.absolutePath)}")
+                append(" > ${RootUtils.shellQuote("$REMOTE_SCRIPTS_DIR/${f.name}")}")
+            }
+            append(" && mkdir -p ${RootUtils.shellQuote(MODULE_DIR)}")
+            append(" && touch ${RootUtils.shellQuote("$MODULE_DIR/settings.conf")}")
+            append(" && echo deployed")
+        }
 
         val result = RootUtils.execSu(deployCmd, timeoutSec = 30)
         return if (result.stdout.contains("deployed") || result.isSuccess) {

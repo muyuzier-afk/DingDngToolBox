@@ -58,7 +58,12 @@ object RootUtils {
                     timedOut = false
                 )
             }
-            val process = Runtime.getRuntime().exec(arrayOf("su", "-c", command))
+            // 统一补全 PATH：部分定制 / 精简 ROM 的 su 子 shell PATH 缺失 /system/bin 等标准目录，
+            // 会让 cp、chmod 等 toybox applet 报 "inaccessible or not found"。
+            // 在此对所有经 execSu 执行的命令统一前置，一处加固、全局受益。
+            val fullCommand =
+                "export PATH=/system/bin:/system/xbin:/vendor/bin:/sbin:\$PATH; $command"
+            val process = Runtime.getRuntime().exec(arrayOf("su", "-c", fullCommand))
             val timedOut = !process.waitFor(timeoutSec, TimeUnit.SECONDS)
             if (timedOut) {
                 process.destroyForcibly()

@@ -102,8 +102,8 @@
     <string name="monitor_mem_available">可用</string>
     <string name="monitor_mem_used">已用</string>
     <string name="monitor_current">瞬时电流</string>
-    <string name="monitor_discharge">放电 %1$d mA</string>
-    <string name="monitor_charge">充电 %1$d mA</string>
+    <string name="monitor_discharge">放电 %1$.0f mA</string>
+    <string name="monitor_charge">充电 %1$.0f mA</string>
 
     <!-- 通用 -->
     <string name="action_back">返回</string>
