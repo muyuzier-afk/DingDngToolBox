@@ -3,6 +3,8 @@ package com.toolbox.ddj.ui.screens.root
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.toolbox.ddj.data.root.RootActionDef
+import com.toolbox.ddj.data.root.RootResult
+import com.toolbox.ddj.data.root.RootResultParser
 import com.toolbox.ddj.data.root.RootScriptManager
 import com.toolbox.ddj.data.root.RootToolCatalog
 import com.toolbox.ddj.data.root.RootToolDef
@@ -13,8 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import org.json.JSONObject
 
 class RootToolDetailViewModel(
     private val toolId: String,
@@ -27,7 +27,7 @@ class RootToolDetailViewModel(
         val running: Boolean = false,
         val lastActionLabel: String? = null,
         val rawOutput: String = "",
-        val prettyOutput: String = "",
+        val result: RootResult? = null,
         val error: String? = null
     )
 
@@ -85,25 +85,11 @@ class RootToolDetailViewModel(
             _uiState.value = _uiState.value.copy(
                 running = false,
                 rawOutput = raw,
-                prettyOutput = tryPrettyJson(raw),
+                result = RootResultParser.parse(raw),
                 error = if (shell.isSuccess) null else "退出码 ${shell.exitCode}" +
                     (if (shell.stderr.isNotBlank()) " · ${shell.stderr}" else ""),
                 rootGranted = true
             )
-        }
-    }
-
-    private fun tryPrettyJson(text: String): String {
-        val t = text.trim()
-        if (t.isEmpty()) return text
-        return try {
-            when {
-                t.startsWith("{") -> JSONObject(t).toString(2)
-                t.startsWith("[") -> JSONArray(t).toString(2)
-                else -> text
-            }
-        } catch (_: Exception) {
-            text
         }
     }
 }

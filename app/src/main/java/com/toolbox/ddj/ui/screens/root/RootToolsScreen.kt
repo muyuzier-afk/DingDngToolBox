@@ -192,11 +192,6 @@ private fun DeployStatusCard(
                 },
                 style = MaterialTheme.typography.bodyMedium
             )
-            Text(
-                text = stringResource(R.string.root_deploy_path),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
-            )
         }
     }
 }

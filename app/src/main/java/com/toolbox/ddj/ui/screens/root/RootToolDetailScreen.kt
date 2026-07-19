@@ -1,6 +1,5 @@
 package com.toolbox.ddj.ui.screens.root
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,7 +51,6 @@ import com.toolbox.ddj.R
 import com.toolbox.ddj.data.root.RootActionDef
 import com.toolbox.ddj.data.root.RootScriptManager
 import com.toolbox.ddj.ui.components.StatusBanner
-import com.toolbox.ddj.ui.components.TonalCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -218,33 +215,26 @@ fun RootToolDetailScreen(
                 )
             }
 
-            TonalCard {
-                Column(Modifier.padding(16.dp)) {
-                    Text(
-                        text = stringResource(R.string.root_output),
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    if (state.lastActionLabel != null) {
-                        Text(
-                            text = state.lastActionLabel!!,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        text = state.prettyOutput.ifBlank {
-                            stringResource(R.string.root_output_empty)
-                        },
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontFamily = FontFamily.Monospace
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState())
-                    )
-                }
+            Text(
+                text = stringResource(R.string.root_output),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold
+            )
+            state.lastActionLabel?.let { label ->
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+            if (state.result != null) {
+                RootResultView(result = state.result, toolId = toolId)
+            } else if (!state.running) {
+                Text(
+                    text = stringResource(R.string.root_output_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
 
             Spacer(Modifier.height(24.dp))
