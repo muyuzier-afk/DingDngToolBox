@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -59,6 +60,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
     val perm by viewModel.permState.collectAsStateWithLifecycle()
+    val remote by viewModel.remote.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     val anyElevated = perm.rootGranted || perm.shizukuGranted
 
@@ -94,11 +96,7 @@ fun HomeScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            StatusBanner(
-                message = stringResource(R.string.home_preview_notice),
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+            AnnouncementCard(announcement = remote?.announcement)
 
             PermissionStatusCard(
                 rootGranted = perm.rootGranted,
@@ -108,7 +106,11 @@ fun HomeScreen(
                 elevated = anyElevated
             )
 
-            VersionInfoCard(version = viewModel.versionName)
+            VersionInfoCard(
+                version = viewModel.versionName,
+                latest = remote?.versionName,
+                hasUpdate = viewModel.hasUpdate(remote)
+            )
 
             SectionLabel(stringResource(R.string.home_section_basic))
 
@@ -292,22 +294,112 @@ private fun PermissionLine(
 }
 
 @Composable
-private fun VersionInfoCard(version: String) {
+private fun AnnouncementCard(announcement: String?) {
+    val text = announcement?.takeIf { it.isNotBlank() }
+    if (text != null) {
+        TonalCard(containerColor = MaterialTheme.colorScheme.secondaryContainer) {
+            Column(Modifier.padding(20.dp)) {
+                MarkdownLite(text, MaterialTheme.colorScheme.onSecondaryContainer)
+            }
+        }
+    } else {
+        // 云端公告未拉到时回退本地预览提示
+        StatusBanner(
+            message = stringResource(R.string.home_preview_notice),
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    }
+}
+
+/** 极简 Markdown：仅处理 # / ## / ### 标题行与空行，不为公告引 Markdown 库。 */
+@Composable
+private fun MarkdownLite(text: String, contentColor: Color) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        text.trim().lines().forEach { raw ->
+            val line = raw.trim()
+            when {
+                line.isBlank() -> Spacer(Modifier.height(2.dp))
+                line.startsWith("### ") -> Text(
+                    line.removePrefix("### "),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = contentColor
+                )
+                line.startsWith("## ") -> Text(
+                    line.removePrefix("## "),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = contentColor
+                )
+                line.startsWith("# ") -> Text(
+                    line.removePrefix("# "),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = contentColor
+                )
+                else -> Text(
+                    line,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = contentColor
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun VersionInfoCard(version: String, latest: String?, hasUpdate: Boolean) {
     TonalCard {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 16.dp)
+                .padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = stringResource(R.string.home_app_version),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                text = version,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.outline
-            )
+            Column {
+                Text(
+                    text = stringResource(R.string.home_app_version),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    text = version,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.home_latest_version),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = latest ?: stringResource(R.string.home_checking),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+                if (latest != null) {
+                    AssistChip(
+                        onClick = {},
+                        label = {
+                            Text(
+                                if (hasUpdate) stringResource(R.string.home_update_available)
+                                else stringResource(R.string.home_up_to_date)
+                            )
+                        },
+                        colors = AssistChipDefaults.assistChipColors(
+                            labelColor = if (hasUpdate) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.outline
+                        )
+                    )
+                }
+            }
         }
     }
 }

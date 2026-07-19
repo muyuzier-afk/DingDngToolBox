@@ -10,6 +10,10 @@
     <string name="home_section_advanced">高级功能</string>
     <string name="home_preview_notice">Alpha 预览版：基础工具 + ROOT 脚本工具箱。ROOT 功能需授权后使用，操作前请确认风险。</string>
     <string name="home_app_version">应用版本</string>
+    <string name="home_latest_version">最新版本</string>
+    <string name="home_update_available">有新版本</string>
+    <string name="home_up_to_date">已是最新</string>
+    <string name="home_checking">检查中…</string>
     <string name="home_footer">叮咚鸡工具箱 · Alpha 0.0.1-Preview\nROOT 脚本部署于 /data/adb/ddj_toolbox</string>
 
     <!-- 工具名 -->

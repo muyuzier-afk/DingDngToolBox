@@ -7,6 +7,10 @@ on:
     branches: [main, master]
   workflow_dispatch:
 
+# 发布 Release 需要写权限
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build Debug APK
@@ -15,6 +19,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # 从根目录 VERSION(JSON) 读取版本，驱动构建与 Release
+      - name: Read VERSION
+        id: ver
+        run: |
+          echo "code=$(jq -r .versionCode VERSION)" >> "$GITHUB_OUTPUT"
+          echo "name=$(jq -r .versionName VERSION)" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -38,10 +49,14 @@ jobs:
         run: |
           echo "Java: $(java -version 2>&1)"
           echo "Gradle: $(gradle --version | head -n 5)"
+          echo "Version: ${{ steps.ver.outputs.name }} (code ${{ steps.ver.outputs.code }})"
           echo "SDK root: $ANDROID_SDK_ROOT"
           ls "$ANDROID_SDK_ROOT/platforms" || true
 
       - name: Build debug APK
+        env:
+          VERSION_CODE: ${{ steps.ver.outputs.code }}
+          VERSION_NAME: ${{ steps.ver.outputs.name }}
         run: gradle assembleDebug --no-daemon --stacktrace --console=plain
 
       - name: Upload APK artifact
@@ -54,6 +69,9 @@ jobs:
 
       - name: Build release APK (unsigned if no secrets)
         continue-on-error: true
+        env:
+          VERSION_CODE: ${{ steps.ver.outputs.code }}
+          VERSION_NAME: ${{ steps.ver.outputs.name }}
         run: gradle assembleRelease --no-daemon --stacktrace --console=plain
 
       - name: Upload release APK (if any)
@@ -64,3 +82,13 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: ignore
           retention-days: 30
+
+      # 仅 main 分支：按 VERSION 发布 Release；tag 已存在则更新并覆盖文件
+      - name: Create / update Release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.code }}
+          name: ${{ steps.ver.outputs.name }}
+          files: app/build/outputs/apk/**/*.apk
+          fail_on_unmatched_files: false
