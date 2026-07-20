@@ -17,13 +17,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Devices
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Sensors
 import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,6 +60,10 @@ import com.toolbox.ddj.ui.components.TonalCard
 fun HomeScreen(
     onOpenDeviceInfo: () -> Unit,
     onOpenSystemMonitor: () -> Unit,
+    onOpenApps: () -> Unit,
+    onOpenNetwork: () -> Unit,
+    onOpenSensors: () -> Unit,
+    onOpenScreenTools: () -> Unit,
     onOpenRootTools: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
@@ -125,6 +133,30 @@ fun HomeScreen(
                 description = stringResource(R.string.tool_system_monitor_desc),
                 icon = Icons.Filled.Speed,
                 onClick = onOpenSystemMonitor
+            )
+            ToolEntryCard(
+                title = stringResource(R.string.tool_apps),
+                description = stringResource(R.string.tool_apps_desc),
+                icon = Icons.Filled.Apps,
+                onClick = onOpenApps
+            )
+            ToolEntryCard(
+                title = stringResource(R.string.tool_network),
+                description = stringResource(R.string.tool_network_desc),
+                icon = Icons.Filled.Wifi,
+                onClick = onOpenNetwork
+            )
+            ToolEntryCard(
+                title = stringResource(R.string.tool_sensors),
+                description = stringResource(R.string.tool_sensors_desc),
+                icon = Icons.Filled.Sensors,
+                onClick = onOpenSensors
+            )
+            ToolEntryCard(
+                title = stringResource(R.string.tool_screentools),
+                description = stringResource(R.string.tool_screentools_desc),
+                icon = Icons.Filled.Storage,
+                onClick = onOpenScreenTools
             )
 
             SectionLabel(stringResource(R.string.home_section_advanced))

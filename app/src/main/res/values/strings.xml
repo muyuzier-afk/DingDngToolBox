@@ -21,8 +21,16 @@
     <string name="tool_device_info_desc">硬件 / 系统 / 屏幕 / 电池一览</string>
     <string name="tool_system_monitor">系统监控</string>
     <string name="tool_system_monitor_desc">CPU / 内存 / 电池实时监控</string>
+    <string name="tool_apps">应用管理</string>
+    <string name="tool_apps_desc">已安装应用列表 / 版本 / 跳转详情</string>
+    <string name="tool_network">网络信息</string>
+    <string name="tool_network_desc">IP / 连接类型 / DNS / 网关</string>
+    <string name="tool_sensors">传感器</string>
+    <string name="tool_sensors_desc">传感器列表与实时读数</string>
+    <string name="tool_screentools">屏幕 &amp; 存储</string>
+    <string name="tool_screentools_desc">存储容量 / 坏点检测 / 触摸测试</string>
     <string name="tool_more_coming">更多工具</string>
-    <string name="tool_more_coming_desc">ADB / 应用管理 / 清理 / 文件管理（即将到来）</string>
+    <string name="tool_more_coming_desc">ADB / 清理 / 文件管理（即将到来）</string>
 
     <!-- 权限状态 -->
     <string name="perm_section">权限状态</string>

@@ -6,9 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.toolbox.ddj.ui.screens.apps.AppListScreen
 import com.toolbox.ddj.ui.screens.deviceinfo.DeviceInfoScreen
 import com.toolbox.ddj.ui.screens.home.HomeScreen
 import com.toolbox.ddj.ui.screens.monitor.SystemMonitorScreen
+import com.toolbox.ddj.ui.screens.network.NetworkInfoScreen
+import com.toolbox.ddj.ui.screens.screentools.ScreenToolsScreen
+import com.toolbox.ddj.ui.screens.sensors.SensorScreen
 import com.toolbox.ddj.ui.screens.root.RootToolDetailScreen
 import com.toolbox.ddj.ui.screens.root.RootToolsScreen
 
@@ -19,6 +23,10 @@ object Routes {
     const val SYSTEM_MONITOR = "system_monitor"
     const val ROOT_TOOLS = "root_tools"
     const val ROOT_TOOL_DETAIL = "root_tool/{toolId}"
+    const val APPS = "apps"
+    const val NETWORK = "network"
+    const val SENSORS = "sensors"
+    const val SCREEN_TOOLS = "screen_tools"
 
     fun rootToolDetail(toolId: String) = "root_tool/$toolId"
 }
@@ -31,6 +39,10 @@ fun DingDongJiNavGraph() {
             HomeScreen(
                 onOpenDeviceInfo = { nav.navigate(Routes.DEVICE_INFO) },
                 onOpenSystemMonitor = { nav.navigate(Routes.SYSTEM_MONITOR) },
+                onOpenApps = { nav.navigate(Routes.APPS) },
+                onOpenNetwork = { nav.navigate(Routes.NETWORK) },
+                onOpenSensors = { nav.navigate(Routes.SENSORS) },
+                onOpenScreenTools = { nav.navigate(Routes.SCREEN_TOOLS) },
                 onOpenRootTools = { nav.navigate(Routes.ROOT_TOOLS) }
             )
         }
@@ -39,6 +51,18 @@ fun DingDongJiNavGraph() {
         }
         composable(Routes.SYSTEM_MONITOR) {
             SystemMonitorScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.APPS) {
+            AppListScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.NETWORK) {
+            NetworkInfoScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.SENSORS) {
+            SensorScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.SCREEN_TOOLS) {
+            ScreenToolsScreen(onBack = { nav.popBackStack() })
         }
         composable(Routes.ROOT_TOOLS) {
             RootToolsScreen(
