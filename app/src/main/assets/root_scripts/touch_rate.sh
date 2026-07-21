@@ -28,6 +28,9 @@ cmd_for() {
         241)  echo "touchHidlTest -c wo 0 182 240" ;;
         361)  echo "touchHidlTest -c wo 0 26 c" ;;
         362)  echo "touchHidlTest -c wo 0 182 360" ;;
+        feel_smooth) echo "touchHidlTest -c wo 0 24 3 ; touchHidlTest -c wo 0 25 2" ;;
+        feel_game)   echo "touchHidlTest -c wo 0 24 5 ; touchHidlTest -c wo 0 25 4" ;;
+        feel_max)    echo "touchHidlTest -c wo 0 24 5 ; touchHidlTest -c wo 0 25 5" ;;
         *)    echo "" ;;
     esac
 }
@@ -66,7 +69,7 @@ case "$ACTION" in
                 printf '{"ok":false,"error":"未知档位: %s"}\n' "$PROFILE"
                 exit 1
             fi
-            $CMD 2>/dev/null
+            sh -c "$CMD" 2>/dev/null
             log "立即执行: $CMD"
             echo "$PROFILE" > "$PROFILE_FILE"
             start_daemon

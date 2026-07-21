@@ -117,6 +117,28 @@ object RootToolCatalog {
             )
         ),
         RootToolDef(
+            id = "mac",
+            title = "MAC 地址",
+            description = "WiFi / 蓝牙 MAC 随机化（本地管理位）",
+            script = "mac.sh",
+            category = RootCategory.IDENTITY,
+            actions = listOf(
+                RootActionDef("info", "查看", listOf("info")),
+                RootActionDef("random", "随机化", listOf("random"), needsConfirm = true),
+                RootActionDef("restore", "恢复", listOf("restore"), needsConfirm = true)
+            )
+        ),
+        RootToolDef(
+            id = "identity_all",
+            title = "一键新机",
+            description = "一次随机化 序列号 / Android ID / OAID / MAC",
+            script = "identity_all.sh",
+            category = RootCategory.IDENTITY,
+            actions = listOf(
+                RootActionDef("run", "一键随机化", listOf("run"), needsConfirm = true, dangerous = true)
+            )
+        ),
+        RootToolDef(
             id = "spoof",
             title = "机型伪装",
             description = "应用 / 恢复机型预设（依赖本地 presets 缓存）",
@@ -240,6 +262,9 @@ object RootToolCatalog {
                 RootActionDef("set_240", "240Hz", listOf("set", "240"), needsConfirm = true),
                 RootActionDef("set_360", "360Hz", listOf("set", "360"), needsConfirm = true),
                 RootActionDef("set_600", "600Hz", listOf("set", "600"), needsConfirm = true),
+                RootActionDef("feel_smooth", "跟手·均衡", listOf("set", "feel_smooth"), needsConfirm = true),
+                RootActionDef("feel_game", "跟手·游戏", listOf("set", "feel_game"), needsConfirm = true),
+                RootActionDef("feel_max", "跟手·极致", listOf("set", "feel_max"), needsConfirm = true),
                 RootActionDef("set_default", "恢复默认", listOf("set", "default")),
                 RootActionDef("stop", "停止守护", listOf("stop"))
             )

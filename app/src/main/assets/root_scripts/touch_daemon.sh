@@ -18,6 +18,9 @@ while true; do
             241) touchHidlTest -c wo 0 182 240 2>/dev/null ;;
             361) touchHidlTest -c wo 0 26 c 2>/dev/null ;;
             362) touchHidlTest -c wo 0 182 360 2>/dev/null ;;
+            feel_smooth) touchHidlTest -c wo 0 24 3 2>/dev/null; touchHidlTest -c wo 0 25 2 2>/dev/null ;;
+            feel_game)   touchHidlTest -c wo 0 24 5 2>/dev/null; touchHidlTest -c wo 0 25 4 2>/dev/null ;;
+            feel_max)    touchHidlTest -c wo 0 24 5 2>/dev/null; touchHidlTest -c wo 0 25 5 2>/dev/null ;;
         esac
     fi
     sleep $INTERVAL

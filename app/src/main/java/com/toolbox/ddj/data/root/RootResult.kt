@@ -191,7 +191,10 @@ object RootFieldLabels {
         "bootloader" to "Bootloader", "selinux" to "SELinux", "magisk" to "Root 方案",
         "screen" to "分辨率", "density" to "像素密度", "battery" to "电量",
         "uptime" to "运行时长(s)", "ram_mb" to "内存(MB)", "timezone" to "时区",
-        "lang" to "语言"
+        "lang" to "语言",
+        // MAC / 网络标识
+        "iface" to "接口", "wifi_mac" to "WiFi MAC", "bt_mac" to "蓝牙 MAC",
+        "orig_bt_mac" to "原始蓝牙 MAC", "mac" to "MAC", "wifi" to "WiFi", "bt" to "蓝牙"
     )
 
     fun label(key: String): String = dict[key] ?: prettify(key)
